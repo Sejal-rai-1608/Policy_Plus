@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:turfnpark/widgets/appbar.dart';
 import '../widgets/CTextfield.dart';
-import '../auth/register.dart';
 
 class ChangePassword extends StatefulWidget {
   const ChangePassword({super.key});
@@ -12,151 +12,161 @@ class ChangePassword extends StatefulWidget {
 
 class _ChangePasswordState extends State<ChangePassword> {
   final passwordController = TextEditingController();
-  final ChangePasswordController = TextEditingController();
-  final NewPasswordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
+  final newPasswordController = TextEditingController();
 
   bool hidePassword = true;
-  bool hideChangePassword = true;
+  bool hideConfirmPassword = true;
   bool hideNewPassword = true;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_outlined, color: Colors.black),
-          onPressed: () {
-            Navigator.pop(
-              context,
-              MaterialPageRoute(builder: (context) => Register()),
-            );
-          },
-        ),
-
-        title: Text(
-          "Change Password",
-          style: TextStyle(
-            color: Color(0xffF58220),
-            fontSize: 28,
-            fontWeight: FontWeight.bold,
-          ),
+      backgroundColor: const Color(0xffF7F7F7),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(kToolbarHeight),
+        child: CustomAppbar(
+          leftImage: "assets/logo/Logo.svg",
+          rightImage: "assets/icons/notification.svg",
         ),
       ),
-      body: Column(
-        //crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          const SizedBox(height: 20),
-          Text(
-            "Your changed password must be different from \n previous used password.",
-            style: TextStyle(
-              color: const Color.fromARGB(255, 157, 157, 157),
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          const SizedBox(height: 20),
+      body: SingleChildScrollView(
+        padding: EdgeInsets.symmetric(horizontal: 18.w, vertical: 10.h),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: 24.h),
 
-          Padding(
-            padding: const EdgeInsets.only(left: 20, right: 20),
-            child: CTextfield(
-              text: "Current Password",
-              hintText: "Enter Your Current Password",
-              prefix: SvgPicture.asset("assets/icons/key.svg"),
-              controller: passwordController,
-              obscureText: hidePassword,
-              suffixIcon: IconButton(
-                icon: Icon(
-                  hidePassword ? Icons.visibility_off : Icons.visibility,
-                  color: Color.fromARGB(255, 0, 0, 0),
-                ),
-                onPressed: () {
-                  setState(() {
-                    hidePassword = !hidePassword;
-                  });
-                },
+            /// 🔹 Form Container
+            Container(
+              padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 14.w),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(18.r),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.05),
+                    blurRadius: 12.r,
+                    offset: Offset(0, 6.h),
+                  ),
+                ],
               ),
-            ),
-          ),
-          const SizedBox(height: 10),
-          Padding(
-            padding: const EdgeInsets.only(left: 20, right: 20),
-            child: CTextfield(
-              text: "New Password",
-              hintText: "Enter Your New Password",
-              prefix: SvgPicture.asset("assets/icons/key.svg"),
-              controller: NewPasswordController,
-              obscureText: hideNewPassword,
-              suffixIcon: IconButton(
-                icon: Icon(
-                  hideNewPassword ? Icons.visibility_off : Icons.visibility,
-                  color: Color.fromARGB(255, 0, 0, 0),
-                ),
-                onPressed: () {
-                  setState(() {
-                    hideNewPassword = !hideNewPassword;
-                  });
-                },
-              ),
-            ),
-          ),
-          SizedBox(height: 10),
+              child: Column(
+                children: [
+                  /// Current Password
+                  CTextfield(
+                    text: "Current Password",
+                    hintText: "Enter current password",
+                    controller: passwordController,
+                    obscureText: hidePassword,
+                    prefix: Icon(
+                      Icons.key_outlined,
+                      size: 22.sp,
+                      color: Colors.black87,
+                    ),
+                    suffixIcon: IconButton(
+                      splashRadius: 20.r,
+                      icon: Icon(
+                        hidePassword
+                            ? Icons.visibility_off_outlined
+                            : Icons.visibility_outlined,
+                        size: 22.sp,
+                        color: Colors.grey.shade600,
+                      ),
+                      onPressed: () =>
+                          setState(() => hidePassword = !hidePassword),
+                    ),
+                  ),
 
-          /// CONFIRM PASSWORD
-          Padding(
-            padding: const EdgeInsets.only(left: 20, right: 20),
-            child: CTextfield(
-              text: "Confirm Password",
-              hintText: "Enter Your Confirm Password",
-              prefix: SvgPicture.asset("assets/icons/key.svg"),
-              controller: ChangePasswordController,
-              obscureText: hideChangePassword,
-              suffixIcon: IconButton(
-                icon: Icon(
-                  hideChangePassword ? Icons.visibility_off : Icons.visibility,
-                  color: Color.fromARGB(255, 0, 0, 0),
-                ),
-                onPressed: () {
-                  setState(() {
-                    hideChangePassword = !hideChangePassword;
-                  });
-                },
+                  SizedBox(height: 16.h),
+
+                  /// New Password
+                  CTextfield(
+                    text: "New Password",
+                    hintText: "Create a strong password",
+                    controller: newPasswordController,
+                    obscureText: hideNewPassword,
+                    prefix: Icon(
+                      Icons.lock_outline,
+                      size: 22.sp,
+                      color: Colors.black87,
+                    ),
+                    suffixIcon: IconButton(
+                      splashRadius: 20.r,
+                      icon: Icon(
+                        hideNewPassword
+                            ? Icons.visibility_off_outlined
+                            : Icons.visibility_outlined,
+                        size: 22.sp,
+                        color: Colors.grey.shade600,
+                      ),
+                      onPressed: () =>
+                          setState(() => hideNewPassword = !hideNewPassword),
+                    ),
+                  ),
+
+                  SizedBox(height: 16.h),
+
+                  /// Confirm Password
+                  CTextfield(
+                    text: "Confirm Password",
+                    hintText: "Re-enter new password",
+                    controller: confirmPasswordController,
+                    obscureText: hideConfirmPassword,
+                    prefix: Icon(
+                      Icons.verified_user_outlined,
+                      size: 22.sp,
+                      color: Colors.black87,
+                    ),
+                    suffixIcon: IconButton(
+                      splashRadius: 20.r,
+                      icon: Icon(
+                        hideConfirmPassword
+                            ? Icons.visibility_off_outlined
+                            : Icons.visibility_outlined,
+                        size: 22.sp,
+                        color: Colors.grey.shade600,
+                      ),
+                      onPressed: () => setState(
+                        () => hideConfirmPassword = !hideConfirmPassword,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-          ),
 
-          const SizedBox(height: 80),
+            SizedBox(height: 40.h),
 
-          /// SIGN UP BUTTON
-          SizedBox(
-            width: 388,
-            height: 50,
-            child: ElevatedButton(
-              onPressed: () {
-                // signup logic
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xffF58220),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(14),
+            /// 🔹 Update Button
+            SizedBox(
+              width: double.infinity,
+              height: 54.h,
+              child: ElevatedButton(
+                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xffF58220),
+                  elevation: 6,
+                  shadowColor: const Color(0xffF58220).withOpacity(0.4),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16.r),
+                  ),
                 ),
-              ),
-              child: const Text(
-                "Updated Password",
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w400,
-                  color: Colors.white,
+                child: Text(
+                  "Update Password",
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: 0.3,
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ),
-          ),
-          const SizedBox(height: 20),
-        ],
+
+            SizedBox(height: 20.h),
+          ],
+        ),
       ),
     );
   }

@@ -1,7 +1,10 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:turfnpark/AccountSub_pages/bank_detail_page.dart';
 import 'package:turfnpark/AccountSub_pages/change_password.dart';
+import 'package:turfnpark/AccountSub_pages/my_policies_page.dart';
+import 'package:turfnpark/AccountSub_pages/payment_history_page.dart';
 
 class AccountPage extends StatefulWidget {
   const AccountPage({super.key});
@@ -31,21 +34,30 @@ class _AccountPageState extends State<AccountPage> {
       "icon": Icons.description,
       "title": "My Policies",
       "onTap": () {
-        print("My Policies Clicked");
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const MyPoliciesPage()),
+        );
       },
     },
     {
       "icon": Icons.payment,
       "title": "Payment History",
       "onTap": () {
-        print("Payment History Clicked");
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const PaymentHistoryPage()),
+        );
       },
     },
     {
       "icon": Icons.account_balance,
       "title": "Bank Details",
       "onTap": () {
-        print("Bank Details Clicked");
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const BankDetailsPage()),
+        );
       },
     },
     {
@@ -62,7 +74,10 @@ class _AccountPageState extends State<AccountPage> {
       "icon": Icons.contact_emergency,
       "title": "Contact Us",
       "onTap": () {
-        print("Contact Us Clicked");
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const MyPoliciesPage()),
+        );
       },
     },
   ];
