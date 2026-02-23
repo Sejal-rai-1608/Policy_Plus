@@ -25,9 +25,9 @@ class _ProfileState extends State<Profile> {
 
   /// 🔹 Top banners
   final List<String> banners = [
-    'assets/images/bann.svg',
-    'assets/images/bann.svg',
-    'assets/images/bann.svg',
+    'assets/images/Banner.jpeg',
+    'assets/images/Banner.jpeg',
+    'assets/images/Banner.jpeg',
   ];
 
   final List<Map<String, String>> policyFeatures = [
@@ -50,9 +50,9 @@ class _ProfileState extends State<Profile> {
 
   /// 🔹 Plans banners
   final List<String> plansBanners = [
-    "assets/images/Plans Banner.svg",
-    "assets/images/Plans Banner.svg",
-    "assets/images/Plans Banner.svg",
+    "assets/images/banner1.jpeg",
+    "assets/images/banner2.jpeg",
+    "assets/images/banner3.jpeg",
   ];
 
   /// 🔹 Insurance categories
@@ -181,19 +181,34 @@ class _ProfileState extends State<Profile> {
         CarouselSlider(
           options: CarouselOptions(
             height: height,
-            viewportFraction: 1,
+            viewportFraction: 1.0,
             autoPlay: true,
+            enlargeCenterPage: true,
             onPageChanged: (index, _) => onChange(index),
           ),
           items: images.map((path) {
-            return SvgPicture.asset(
-              path,
-              width: double.infinity,
-              fit: BoxFit.cover,
+            /// 🔥 detect file type
+            final isSvg = path.toLowerCase().endsWith(".svg");
+
+            return ClipRRect(
+              borderRadius: BorderRadius.circular(14.r),
+              child: isSvg
+                  ? SvgPicture.asset(
+                      path,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                    )
+                  : Image.asset(
+                      path,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                    ),
             );
           }).toList(),
         ),
+
         AppSpace.h10,
+
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: List.generate(

@@ -6,6 +6,7 @@ import 'package:turfnpark/AccountSub_pages/bank_detail_page.dart';
 import 'package:turfnpark/AccountSub_pages/change_password.dart';
 import 'package:turfnpark/AccountSub_pages/my_policies_page.dart';
 import 'package:turfnpark/AccountSub_pages/payment_history_page.dart';
+import 'package:turfnpark/Pages/agent_page.dart';
 import 'package:turfnpark/utils/app_text_styles.dart';
 import 'package:turfnpark/utils/spacing.dart';
 import 'package:turfnpark/widgets/app_card.dart';
@@ -76,13 +77,14 @@ class _AccountPageState extends State<AccountPage> {
         );
       },
     },
+
     {
       "icon": Icons.contact_emergency,
-      "title": "Contact Us",
+      "title": "Agents",
       "onTap": () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const MyPoliciesPage()),
+          MaterialPageRoute(builder: (context) => AgentPage()),
         );
       },
     },
@@ -170,31 +172,36 @@ class _AccountPageState extends State<AccountPage> {
                         top: Radius.circular(30.r),
                       ),
                     ),
-                    child: Column(
-                      children: [
-                        // 📦 Menu Card
-                        AppCard(
-                          child: Column(
-                            children: List.generate(menuItems.length, (index) {
-                              final item = menuItems[index];
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
+                      child: Column(
+                        children: [
+                          // 📦 Menu Card
+                          AppCard(
+                            child: Column(
+                              children: List.generate(menuItems.length, (
+                                index,
+                              ) {
+                                final item = menuItems[index];
 
-                              return MenuTile(
-                                icon: item["icon"] as IconData,
-                                title: item["title"] as String,
-                                onTap: item["onTap"] as VoidCallback,
-                                showDivider: index != menuItems.length - 1,
-                              );
-                            }),
+                                return MenuTile(
+                                  icon: item["icon"] as IconData,
+                                  title: item["title"] as String,
+                                  onTap: item["onTap"] as VoidCallback,
+                                  showDivider: index != menuItems.length - 1,
+                                );
+                              }),
+                            ),
                           ),
-                        ),
-                        AppSpace.h24,
+                          AppSpace.h24,
 
-                        //  Logout Button
-                        PrimaryButton(text: "Logout", onPressed: () {}),
-                      ],
+                          //  Logout Button
+                        ],
+                      ),
                     ),
                   ),
                 ),
+                PrimaryButton(text: "Logout", onPressed: () {}),
               ],
             ),
           ),

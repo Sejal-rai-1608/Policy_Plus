@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:turfnpark/widgets/CTextfield.dart';
 import 'package:turfnpark/widgets/appbar.dart';
 import 'package:turfnpark/widgets/primary_button.dart';
 
@@ -8,48 +9,50 @@ class BankDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.grey.shade100,
-      appBar: const CustomAppbar(leftImage: "assets/logo/Logo.svg"),
+    return SafeArea(
+      top: false,
+      child: Scaffold(
+        backgroundColor: Colors.grey.shade100,
+        appBar: const CustomAppbar(leftImage: "assets/logo/Logo.svg"),
 
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(16.w),
-        child: Column(
-          children: [
-            _buildTextField("Account Holder Name"),
-            _buildTextField("Bank Name"),
-            _buildTextField("Account Number", isNumber: true),
-            _buildTextField("Confirm Account Number", isNumber: true),
-            _buildTextField("IFSC Code"),
-            _buildTextField("Branch Name"),
+        body: SingleChildScrollView(
+          padding: EdgeInsets.all(16.w),
+          child: Column(
+            children: [
+              CTextfield(
+                hintText: "Account Holder Name",
+                text: "Account Holder Name",
+                errorText: "Enter Account Holder Name",
+              ),
+              CTextfield(
+                hintText: "Bank Name",
+                text: "Bank Name",
+                errorText: "Enter Bank Name",
+              ),
+              CTextfield(
+                hintText: "Account Number",
+                text: "Account Number",
+                errorText: "Account Number",
+              ),
+              CTextfield(
+                hintText: "Confirm Account Number",
+                text: "Confirm Account Number",
+                errorText: "Enter Account Number",
+              ),
+              CTextfield(
+                hintText: "IFSC Code",
+                text: "IFSC Code",
+                errorText: "Enter IFSC Code",
+              ),
+              CTextfield(
+                hintText: "Branch Name",
+                text: "Branch Name",
+                errorText: "Enter Branch Name",
+              ),
 
-            SizedBox(height: 30.h),
-
-            /// Save Button
-            PrimaryButton(text: "Save Details", onPressed: () {}),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTextField(String hint, {bool isNumber = false}) {
-    return Padding(
-      padding: EdgeInsets.only(bottom: 14.h),
-      child: TextField(
-        keyboardType: isNumber ? TextInputType.number : TextInputType.text,
-        style: TextStyle(fontSize: 14.sp),
-        decoration: InputDecoration(
-          hintText: hint,
-          filled: true,
-          fillColor: Colors.white,
-          contentPadding: EdgeInsets.symmetric(
-            horizontal: 16.w,
-            vertical: 14.h,
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(14.r),
-            borderSide: BorderSide.none,
+              /// Save Button
+              PrimaryButton(text: "Save Details", onPressed: () {}),
+            ],
           ),
         ),
       ),
