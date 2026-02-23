@@ -8,21 +8,24 @@ class PaymentHistoryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.grey.shade100,
-      appBar: const CustomAppbar(leftImage: "assets/logo/Logo.svg"),
+    return SafeArea(
+      top: false,
+      child: Scaffold(
+        backgroundColor: Colors.grey.shade100,
+        appBar: const CustomAppbar(leftImage: "assets/logo/Logo.svg"),
 
-      body: ListView.builder(
-        padding: EdgeInsets.all(16.w),
-        itemCount: 10,
-        itemBuilder: (context, index) {
-          return const PaymentCard(
-            title: "Premium Policy Booking",
-            date: "12 Feb 2026",
-            amount: "₹1,200",
-            status: "Success",
-          );
-        },
+        body: ListView.builder(
+          padding: EdgeInsets.all(16.w),
+          itemCount: 10,
+          itemBuilder: (context, index) {
+            return const PaymentCard(
+              title: "Premium Policy Booking",
+              date: "12 Feb 2026",
+              amount: "₹1,200",
+              status: "Success",
+            );
+          },
+        ),
       ),
     );
   }

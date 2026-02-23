@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:turfnpark/utils/app_text_styles.dart';
+import 'package:turfnpark/utils/spacing.dart';
 
 class StatsPage extends StatefulWidget {
   const StatsPage({super.key});
@@ -12,14 +15,13 @@ class _StatsPageState extends State<StatsPage> {
   static const primaryOrange = Color(0xffF58220);
   static const bgColor = Color(0xffFFF6ED);
 
-  /// 🔥 Animated Values
+  /// animated chart values
   List<double> values = [0, 0, 0, 0, 0, 0];
 
   @override
   void initState() {
     super.initState();
 
-    /// Delay so animation visible
     Future.delayed(const Duration(milliseconds: 400), () {
       setState(() {
         values = [12, 18, 15, 22, 17, 26];
@@ -34,171 +36,165 @@ class _StatsPageState extends State<StatsPage> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: const Text(
-          "Dashboard",
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600),
-        ),
+        title: Text("Dashboard"),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            /// 🔥 UNIQUE TOP CARD
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(24),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(30),
-                gradient: const LinearGradient(
-                  colors: [Color(0xffF58220), Color(0xffFF9F45)],
-                ),
-              ),
-              child: Stack(
-                children: [
-                  Positioned(
-                    right: -40,
-                    top: -40,
-                    child: Container(
-                      height: 140,
-                      width: 140,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.white.withOpacity(0.08),
-                      ),
-                    ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
+          child: Column(
+            children: [
+              /// 🔥 TOP REVENUE CARD
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.all(24.w),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(30.r),
+                  gradient: const LinearGradient(
+                    colors: [Color(0xffF58220), Color(0xffFF9F45)],
                   ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        "Total Revenue",
-                        style: TextStyle(color: Colors.white70),
-                      ),
-                      const SizedBox(height: 16),
-                      const Text(
-                        "₹ 4,89,400",
-                        style: TextStyle(
-                          fontSize: 32,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                ),
+                child: Stack(
+                  children: [
+                    Positioned(
+                      right: -40.w,
+                      top: -40.h,
+                      child: Container(
+                        height: 140.w,
+                        width: 140.w,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.white.withOpacity(0.08),
                         ),
                       ),
-                      const SizedBox(height: 6),
-                      const Text(
-                        "+18% this month",
-                        style: TextStyle(color: Colors.white70),
-                      ),
-                    ],
-                  ),
-                ],
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Total Revenue",
+                          style: AppTextStyles.whiteSubtitle,
+                        ),
+                        Text(
+                          "₹ 4,89,400",
+                          style: AppTextStyles.mainTitlewithwhite,
+                        ),
+                        AppSpace.h4,
+                        Text("+18% this month", style: AppTextStyles.badgeText),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
 
-            const SizedBox(height: 30),
+              AppSpace.h20,
 
-            /// 📊 ANIMATED GRAPH CARD
-            Container(
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(24),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    "Revenue Overview",
-                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
-                  ),
-                  const SizedBox(height: 20),
-                  SizedBox(
-                    height: 220,
-                    child: BarChart(
-                      BarChartData(
-                        alignment: BarChartAlignment.spaceAround,
-                        maxY: 30,
-                        borderData: FlBorderData(show: false),
-                        gridData: FlGridData(show: false),
-                        titlesData: FlTitlesData(
-                          leftTitles: AxisTitles(
-                            sideTitles: SideTitles(showTitles: false),
-                          ),
-                          rightTitles: AxisTitles(
-                            sideTitles: SideTitles(showTitles: false),
-                          ),
-                          topTitles: AxisTitles(
-                            sideTitles: SideTitles(showTitles: false),
-                          ),
-                          bottomTitles: AxisTitles(
-                            sideTitles: SideTitles(
-                              showTitles: true,
-                              getTitlesWidget: (value, meta) {
-                                const months = [
-                                  "Jan",
-                                  "Feb",
-                                  "Mar",
-                                  "Apr",
-                                  "May",
-                                  "Jun",
-                                ];
-                                return Padding(
-                                  padding: const EdgeInsets.only(top: 6),
-                                  child: Text(
-                                    months[value.toInt()],
-                                    style: const TextStyle(fontSize: 12),
-                                  ),
-                                );
-                              },
+              /// 📊 REVENUE GRAPH CARD
+              Container(
+                padding: EdgeInsets.all(20.w),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(24.r),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Revenue Overview", style: AppTextStyles.cardTitle),
+                    AppSpace.h10,
+                    SizedBox(
+                      height: 220.h,
+                      child: BarChart(
+                        BarChartData(
+                          alignment: BarChartAlignment.spaceAround,
+                          maxY: 30,
+                          borderData: FlBorderData(show: false),
+                          gridData: FlGridData(show: false),
+                          titlesData: FlTitlesData(
+                            leftTitles: AxisTitles(
+                              sideTitles: SideTitles(showTitles: false),
+                            ),
+                            rightTitles: AxisTitles(
+                              sideTitles: SideTitles(showTitles: false),
+                            ),
+                            topTitles: AxisTitles(
+                              sideTitles: SideTitles(showTitles: false),
+                            ),
+                            bottomTitles: AxisTitles(
+                              sideTitles: SideTitles(
+                                showTitles: true,
+                                getTitlesWidget: (value, meta) {
+                                  const months = [
+                                    "Jan",
+                                    "Feb",
+                                    "Mar",
+                                    "Apr",
+                                    "May",
+                                    "Jun",
+                                  ];
+                                  return Padding(
+                                    padding: EdgeInsets.only(top: 6.h),
+                                    child: Text(
+                                      months[value.toInt()],
+                                      style: AppTextStyles.smallText,
+                                    ),
+                                  );
+                                },
+                              ),
                             ),
                           ),
+                          barGroups: List.generate(
+                            values.length,
+                            (i) => makeBar(i, values[i]),
+                          ),
                         ),
-                        barGroups: List.generate(
-                          values.length,
-                          (index) => makeBar(index, values[index]),
+                        swapAnimationDuration: const Duration(
+                          milliseconds: 900,
                         ),
+                        swapAnimationCurve: Curves.easeOutBack,
                       ),
-                      swapAnimationDuration: const Duration(milliseconds: 900),
-                      swapAnimationCurve: Curves.easeOutCubic,
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
 
-            const SizedBox(height: 30),
+              AppSpace.h20,
 
-            /// 🫧 BUBBLE CARDS
-            GridView.count(
-              crossAxisCount: 2,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              crossAxisSpacing: 20,
-              mainAxisSpacing: 20,
-              childAspectRatio: 1,
-              children: const [
-                DashboardCard(
-                  title: "Total Agents",
-                  value: "197",
-                  icon: Icons.people,
-                ),
-                DashboardCard(
-                  title: "Customers",
-                  value: "2,659",
-                  icon: Icons.person,
-                ),
-                DashboardCard(
-                  title: "Annual Deals",
-                  value: "489",
-                  icon: Icons.favorite,
-                ),
-                DashboardCard(
-                  title: "Conversion",
-                  value: "32.8%",
-                  icon: Icons.trending_up,
-                ),
-              ],
-            ),
-          ],
+              /// 🫧 DASHBOARD CARDS GRID
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  return GridView.count(
+                    crossAxisCount: constraints.maxWidth > 600 ? 4 : 2,
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    crossAxisSpacing: 20.w,
+                    mainAxisSpacing: 20.h,
+                    childAspectRatio: 1,
+                    children: const [
+                      DashboardCard(
+                        title: "Total Agents",
+                        value: "197",
+                        icon: Icons.people,
+                      ),
+                      DashboardCard(
+                        title: "Customers",
+                        value: "2,659",
+                        icon: Icons.person,
+                      ),
+                      DashboardCard(
+                        title: "Annual Deals",
+                        value: "489",
+                        icon: Icons.favorite,
+                      ),
+                      DashboardCard(
+                        title: "Conversion",
+                        value: "32.8%",
+                        icon: Icons.trending_up,
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -210,8 +206,8 @@ class _StatsPageState extends State<StatsPage> {
       barRods: [
         BarChartRodData(
           toY: y,
-          width: 16,
-          borderRadius: BorderRadius.circular(20),
+          width: 14.w,
+          borderRadius: BorderRadius.circular(20.r),
           gradient: const LinearGradient(
             colors: [Color(0xffF58220), Color(0xffFFD1A3)],
             begin: Alignment.bottomCenter,
@@ -223,7 +219,7 @@ class _StatsPageState extends State<StatsPage> {
   }
 }
 
-/// 🫧 Bubble Dashboard Cards
+/// 🫧 Dashboard Card
 class DashboardCard extends StatelessWidget {
   final String title;
   final String value;
@@ -241,9 +237,9 @@ class DashboardCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: EdgeInsets.all(20.w),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(32),
+        borderRadius: BorderRadius.circular(32.r),
         gradient: const LinearGradient(
           colors: [Color(0xffFFE5D0), Color(0xffFFD1B0)],
         ),
@@ -259,27 +255,20 @@ class DashboardCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            height: 50,
-            width: 50,
+            height: 50.w,
+            width: 50.w,
             decoration: BoxDecoration(
               color: Colors.white.withOpacity(0.6),
               shape: BoxShape.circle,
             ),
-            child: Icon(icon, color: primaryOrange, size: 24),
+            child: Icon(icon, color: primaryOrange, size: 24.sp),
           ),
-          const Spacer(),
-          Text(
-            value,
-            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 6),
-          Text(
-            title,
-            style: const TextStyle(fontSize: 13, color: Colors.black54),
-          ),
+          SizedBox(height: 12.h),
+          Text(value, style: AppTextStyles.cardTitle),
+          AppSpace.h4,
+          Text(title, style: AppTextStyles.smallText),
         ],
       ),
     );
   }
 }
-  

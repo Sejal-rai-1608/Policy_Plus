@@ -19,6 +19,11 @@ class AppTextStyles {
     fontWeight: FontWeight.w600,
     color: Colors.grey.shade600,
   );
+  static TextStyle mainTitlewithwhite = TextStyle(
+    fontSize: 20.sp,
+    fontWeight: FontWeight.w600,
+    color: Colors.white,
+  );
 
   static TextStyle fieldLabel = TextStyle(
     fontSize: 14.sp,
@@ -29,6 +34,11 @@ class AppTextStyles {
   static TextStyle hintText = TextStyle(fontSize: 14.sp, color: Colors.grey);
 
   static TextStyle errorText = TextStyle(fontSize: 12.sp, color: Colors.red);
+
+  static TextStyle successText = TextStyle(
+    fontSize: 12.sp,
+    color: Colors.green.shade900,
+  );
 
   static TextStyle smallText = TextStyle(fontSize: 11.sp, color: Colors.black);
 

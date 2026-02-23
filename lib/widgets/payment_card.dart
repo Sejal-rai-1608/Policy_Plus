@@ -2,6 +2,8 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:turfnpark/utils/app_text_styles.dart';
+import 'package:turfnpark/utils/spacing.dart';
 
 class PaymentCard extends StatelessWidget {
   final String title;
@@ -63,18 +65,9 @@ class PaymentCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  title,
-                  style: TextStyle(
-                    fontSize: 15.sp,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                SizedBox(height: 6.h),
-                Text(
-                  date,
-                  style: TextStyle(fontSize: 13.sp, color: Colors.grey),
-                ),
+                Text(title, style: AppTextStyles.cardMeta),
+                AppSpace.h8,
+                Text(date, style: AppTextStyles.hintText),
               ],
             ),
           ),
@@ -83,10 +76,7 @@ class PaymentCard extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Text(
-                amount,
-                style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
-              ),
+              Text(amount, style: AppTextStyles.fieldLabel),
               SizedBox(height: 6.h),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
@@ -94,14 +84,7 @@ class PaymentCard extends StatelessWidget {
                   color: getStatusColor().withOpacity(0.12),
                   borderRadius: BorderRadius.circular(8.r),
                 ),
-                child: Text(
-                  status,
-                  style: TextStyle(
-                    color: getStatusColor(),
-                    fontSize: 12.sp,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
+                child: Text(status, style: AppTextStyles.successText),
               ),
             ],
           ),

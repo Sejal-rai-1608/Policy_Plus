@@ -26,15 +26,9 @@ class _HomePageState extends State<HomePage> {
 
   /// 🔹 Top banners
   final List<String> banners = [
-<<<<<<< HEAD:lib/Pages/profile.dart
-    'assets/images/Banner.jpeg',
-    'assets/images/Banner.jpeg',
-    'assets/images/Banner.jpeg',
-=======
     'assets/images/Banner.jpg',
     'assets/images/Banner.jpg',
     'assets/images/Banner.jpg',
->>>>>>> f43fb62877287aacb157ed1b7bba5a1c7a10175a:lib/Pages/Home.dart
   ];
 
   final List<Map<String, String>> policyFeatures = [
@@ -55,19 +49,11 @@ class _HomePageState extends State<HomePage> {
     },
   ];
 
-<<<<<<< HEAD:lib/Pages/profile.dart
-  /// 🔹 Plans banners
-  final List<String> plansBanners = [
-    "assets/images/banner1.jpeg",
-    "assets/images/banner2.jpeg",
-    "assets/images/banner3.jpeg",
-=======
   /// 🔹  banners
   final List<String> Banners = [
     "assets/images/banner1.jpg",
     "assets/images/banner2.jpg",
     "assets/images/banner3.jpg",
->>>>>>> f43fb62877287aacb157ed1b7bba5a1c7a10175a:lib/Pages/Home.dart
   ];
 
   /// 🔹 Insurance categories
@@ -322,15 +308,9 @@ class _HomePageState extends State<HomePage> {
               },
               child: Row(
                 children: [
-                  Text(
-                    "More",
-                    style: TextStyle(
-                      color: const Color(0xffF58220),
-                      fontWeight: FontWeight.w600,
-                      fontSize: 14.sp,
-                    ),
-                  ),
-                  SizedBox(width: 4.w),
+                  Text("More", style: AppTextStyles.cardSubtitle),
+
+                  AppSpace.w4,
                   Icon(
                     Icons.arrow_forward_ios,
                     size: 14.sp,

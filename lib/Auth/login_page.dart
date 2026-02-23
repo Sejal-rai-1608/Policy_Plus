@@ -1,8 +1,9 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:turfnpark/Pages/Home.dart';
 import 'package:turfnpark/Pages/mainscreen.dart';
+import 'package:turfnpark/utils/app_text_styles.dart';
+import 'package:turfnpark/utils/spacing.dart';
 import 'package:turfnpark/widgets/primary_button.dart';
 import '../auth/forgot_password.dart';
 import '../auth/register.dart';
@@ -47,14 +48,17 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 60.h),
+              AppSpace.h24,
 
               /// 🔥 Logo + Title
               Center(
                 child: Column(
                   children: [
-                    SvgPicture.asset("assets/logo/Logo.svg", height: 80.h),
-                    SizedBox(height: 12.h),
+                    SvgPicture.asset(
+                      "assets/logo/Logo.svg",
+                      height: ScreenUtil().screenHeight < 700 ? 60.h : 80.h,
+                    ),
+                    AppSpace.h10,
                     // Text(
                     //   "PolicyPlus",
                     //   style: TextStyle(
@@ -67,7 +71,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
 
-              SizedBox(height: 40.h),
+              AppSpace.h20,
 
               /// 🔥 Username
               CTextfield(
@@ -79,7 +83,7 @@ class _LoginPageState extends State<LoginPage> {
                 controller: usernameController,
               ),
 
-              SizedBox(height: 16.h),
+              AppSpace.h10,
 
               /// 🔥 Password
               CTextfield(
@@ -103,8 +107,6 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
 
-              SizedBox(height: 12.h),
-
               /// 🔥 Forgot Password
               Align(
                 alignment: Alignment.centerRight,
@@ -117,16 +119,12 @@ class _LoginPageState extends State<LoginPage> {
                   },
                   child: Text(
                     "Forgot Password?",
-                    style: TextStyle(
-                      fontSize: 14.sp,
-                      color: Colors.grey,
-                      decoration: TextDecoration.underline,
-                    ),
+                    style: AppTextStyles.cardMeta,
                   ),
                 ),
               ),
 
-              SizedBox(height: 30.h),
+              AppSpace.h24,
 
               /// 🔥 Login Button
               PrimaryButton(
@@ -138,7 +136,7 @@ class _LoginPageState extends State<LoginPage> {
                   );
                 },
               ),
-              SizedBox(height: 24.h),
+              AppSpace.h20,
 
               /// 🔥 Register
               Center(
@@ -168,31 +166,29 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
 
-              SizedBox(height: 40.h),
+              AppSpace.h24,
 
               /// 🔥 Divider Text
               Center(
                 child: Text(
                   "Other ways to sign in",
-                  style: TextStyle(fontSize: 14.sp, color: Colors.grey),
+                  style: AppTextStyles.cardMeta,
                 ),
               ),
 
-              SizedBox(height: 20.h),
+              AppSpace.h20,
 
               /// 🔥 Social Icons
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Image.asset("assets/logo/facebook.png", height: 40.h),
-                  SizedBox(width: 24.w),
-                  SvgPicture.asset("assets/logo/google.svg", height: 40.h),
-                  SizedBox(width: 24.w),
-                  SvgPicture.asset("assets/logo/apple.svg", height: 40.h),
+                  Image.asset("assets/logo/facebook.png", height: 36.h),
+                  AppSpace.w16,
+                  SvgPicture.asset("assets/logo/google.svg", height: 36.h),
+                  AppSpace.w16,
+                  SvgPicture.asset("assets/logo/apple.svg", height: 36.h),
                 ],
               ),
-
-              SizedBox(height: 40.h),
             ],
           ),
         ),
