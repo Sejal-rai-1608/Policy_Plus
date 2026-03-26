@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+//import 'package:turfnpark/services/api_service.dart' as ApiService;
 import 'package:turfnpark/widgets/appbar.dart';
+import '../services/api_service.dart';
 
 class MyPoliciesPage extends StatelessWidget {
   const MyPoliciesPage({super.key});
@@ -34,11 +36,11 @@ class MyPoliciesPage extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  summaryItem("Total", "3"),
+                  summaryItem("Total", "-"),
                   divider(),
-                  summaryItem("Active", "2"),
+                  summaryItem("Active", "-"),
                   divider(),
-                  summaryItem("Expired", "1"),
+                  summaryItem("Expired", "-"),
                 ],
               ),
             ),
@@ -46,36 +48,40 @@ class MyPoliciesPage extends StatelessWidget {
 
           SizedBox(height: 20.h),
 
-          /// 🔹 Policy List
+          /// 🔹 Policy List from API
           Expanded(
-            child: ListView(
-              padding: EdgeInsets.symmetric(horizontal: 20.w),
-              children: const [
-                PolicyCard(
-                  title: "Health Secure Plan",
-                  policyNo: "HS-908123",
-                  coverage: "₹5,00,000",
-                  premium: "₹4,200/year",
-                  validTill: "12 Dec 2026",
-                  status: "Active",
-                ),
-                PolicyCard(
-                  title: "Life Protection Plan",
-                  policyNo: "LP-552341",
-                  coverage: "₹10,00,000",
-                  premium: "₹8,500/year",
-                  validTill: "04 Mar 2025",
-                  status: "Expired",
-                ),
-                PolicyCard(
-                  title: "Motor Insurance",
-                  policyNo: "MI-778821",
-                  coverage: "₹3,00,000",
-                  premium: "₹3,200/year",
-                  validTill: "19 Oct 2026",
-                  status: "Active",
-                ),
-              ],
+            child: FutureBuilder(
+              future: ApiService.getPolicies(),
+              builder: (context, snapshot) {
+                print("SNAPSHOT DATA: ${snapshot.data}");
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+
+                if (!snapshot.hasData || (snapshot.data as List).isEmpty) {
+                  return const Center(child: Text("No policies found"));
+                }
+
+                var policies = snapshot.data as List;
+
+                return ListView.builder(
+                  padding: EdgeInsets.symmetric(horizontal: 20.w),
+                  itemCount: policies.length,
+                  itemBuilder: (context, index) {
+                    var policy = policies[index];
+
+                    return PolicyCard(
+                      title: policy["title"],
+                      policyNo: policy["_id"].toString().substring(0, 6),
+                      description: policy["description"],
+                      coverage: "₹${policy["price"] ?? 0}",
+                      premium: "₹${policy["price"] ?? 0}/year",
+                      validTill: "2026",
+                      status: "Active",
+                    );
+                  },
+                );
+              },
             ),
           ),
         ],
@@ -83,7 +89,7 @@ class MyPoliciesPage extends StatelessWidget {
     );
   }
 
-  Widget summaryItem(String title, String value) {
+  static Widget summaryItem(String title, String value) {
     return Column(
       children: [
         Text(
@@ -103,7 +109,7 @@ class MyPoliciesPage extends StatelessWidget {
     );
   }
 
-  Widget divider() {
+  static Widget divider() {
     return Container(height: 28.h, width: 1, color: Colors.grey.shade300);
   }
 }
@@ -111,6 +117,7 @@ class MyPoliciesPage extends StatelessWidget {
 class PolicyCard extends StatelessWidget {
   final String title;
   final String policyNo;
+  final String description;
   final String coverage;
   final String premium;
   final String validTill;
@@ -120,6 +127,7 @@ class PolicyCard extends StatelessWidget {
     super.key,
     required this.title,
     required this.policyNo,
+    required this.description,
     required this.coverage,
     required this.premium,
     required this.validTill,
@@ -193,6 +201,7 @@ class PolicyCard extends StatelessWidget {
           SizedBox(height: 14.h),
 
           infoRow("Policy No", policyNo),
+          infoRow("Description", description),
           infoRow("Coverage", coverage),
           infoRow("Premium", premium),
           infoRow("Valid Till", validTill),

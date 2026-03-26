@@ -1,13 +1,13 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:turfnpark/Pages/Home.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:turfnpark/Pages/mainscreen.dart';
-import 'package:turfnpark/widgets/primary_button.dart';
 import '../auth/forgot_password.dart';
 import '../auth/register.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../widgets/CTextfield.dart';
+import 'package:turfnpark/widgets/primary_button.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -17,22 +17,65 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  late TextEditingController usernameController;
-  late TextEditingController passwordController;
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
   bool hidePassword = true;
+  bool isLoading = false;
 
   @override
   void initState() {
     super.initState();
-    usernameController = TextEditingController();
+    emailController = TextEditingController();
     passwordController = TextEditingController();
   }
 
   @override
   void dispose() {
-    usernameController.dispose();
+    emailController.dispose();
     passwordController.dispose();
     super.dispose();
+  }
+
+  // ✅ CLEAN LOGIN FUNCTION
+  Future<void> loginUser() async {
+    if (emailController.text.isEmpty || passwordController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Please enter email and password")),
+      );
+      return;
+    }
+
+    setState(() => isLoading = true);
+
+    try {
+      print("LOGIN START");
+
+      final userCred = await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: emailController.text.trim(),
+        password: passwordController.text.trim(),
+      );
+
+      print("LOGIN SUCCESS: ${userCred.user?.email}");
+
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Login Successful")));
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const MainScreen()),
+      );
+    } on FirebaseAuthException catch (e) {
+      print("LOGIN ERROR: ${e.message}");
+
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(e.message ?? "Login failed")));
+    } catch (e) {
+      print("GENERAL ERROR: $e");
+    } finally {
+      setState(() => isLoading = false);
+    }
   }
 
   @override
@@ -42,46 +85,32 @@ class _LoginPageState extends State<LoginPage> {
       backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
           padding: EdgeInsets.symmetric(horizontal: 24.w),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 60.h),
 
-              /// 🔥 Logo + Title
               Center(
-                child: Column(
-                  children: [
-                    SvgPicture.asset("assets/logo/Logo.svg", height: 80.h),
-                    SizedBox(height: 12.h),
-                    // Text(
-                    //   "PolicyPlus",
-                    //   style: TextStyle(
-                    //     fontSize: 28.sp,
-                    //     fontWeight: FontWeight.bold,
-                    //     color: Colors.black,
-                    //   ),
-                    // ),
-                  ],
-                ),
+                child: SvgPicture.asset("assets/logo/Logo.svg", height: 80.h),
               ),
 
               SizedBox(height: 40.h),
 
-              /// 🔥 Username
+              /// 🔹 EMAIL FIELD
               CTextfield(
-                hintText: "Username",
+                hintText: "Email",
                 prefix: SvgPicture.asset(
-                  "assets/icons/Icon.svg",
+                  "assets/icons/mail.svg",
                   color: const Color.fromARGB(255, 51, 51, 51),
                 ),
-                controller: usernameController,
+                controller: emailController,
+                keyboardType: TextInputType.emailAddress,
               ),
 
               SizedBox(height: 16.h),
 
-              /// 🔥 Password
+              /// 🔹 PASSWORD FIELD
               CTextfield(
                 hintText: "Password",
                 prefix: SvgPicture.asset(
@@ -105,14 +134,14 @@ class _LoginPageState extends State<LoginPage> {
 
               SizedBox(height: 12.h),
 
-              /// 🔥 Forgot Password
+              /// 🔹 FORGOT PASSWORD
               Align(
                 alignment: Alignment.centerRight,
                 child: GestureDetector(
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => ForgotPassword()),
+                      MaterialPageRoute(builder: (_) => ForgotPassword()),
                     );
                   },
                   child: Text(
@@ -128,19 +157,15 @@ class _LoginPageState extends State<LoginPage> {
 
               SizedBox(height: 30.h),
 
-              /// 🔥 Login Button
+              /// 🔹 LOGIN BUTTON
               PrimaryButton(
-                text: "Login",
-                onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => MainScreen()),
-                  );
-                },
+                text: isLoading ? "Please wait..." : "Login",
+                onPressed: isLoading ? () {} : () async => await loginUser(),
               ),
+
               SizedBox(height: 24.h),
 
-              /// 🔥 Register
+              /// 🔹 REGISTER LINK
               Center(
                 child: RichText(
                   text: TextSpan(
@@ -149,8 +174,8 @@ class _LoginPageState extends State<LoginPage> {
                       const TextSpan(text: "Don't have an account? "),
                       TextSpan(
                         text: "Register Now",
-                        style: TextStyle(
-                          color: const Color(0xffF58220),
+                        style: const TextStyle(
+                          color: Color(0xffF58220),
                           fontWeight: FontWeight.bold,
                         ),
                         recognizer: TapGestureRecognizer()
@@ -158,7 +183,7 @@ class _LoginPageState extends State<LoginPage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => Register(),
+                                builder: (_) => const Register(),
                               ),
                             );
                           },
@@ -166,30 +191,6 @@ class _LoginPageState extends State<LoginPage> {
                     ],
                   ),
                 ),
-              ),
-
-              SizedBox(height: 40.h),
-
-              /// 🔥 Divider Text
-              Center(
-                child: Text(
-                  "Other ways to sign in",
-                  style: TextStyle(fontSize: 14.sp, color: Colors.grey),
-                ),
-              ),
-
-              SizedBox(height: 20.h),
-
-              /// 🔥 Social Icons
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset("assets/logo/facebook.png", height: 40.h),
-                  SizedBox(width: 24.w),
-                  SvgPicture.asset("assets/logo/google.svg", height: 40.h),
-                  SizedBox(width: 24.w),
-                  SvgPicture.asset("assets/logo/apple.svg", height: 40.h),
-                ],
               ),
 
               SizedBox(height: 40.h),

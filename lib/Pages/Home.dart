@@ -26,9 +26,9 @@ class _HomePageState extends State<HomePage> {
 
   /// 🔹 Top banners
   final List<String> banners = [
-    'assets/images/Banner.jpg',
-    'assets/images/Banner.jpg',
-    'assets/images/Banner.jpg',
+    'assets/images/banner1.jpg',
+    'assets/images/banner2.jpg',
+    'assets/images/banner3.jpg',
   ];
 
   final List<Map<String, String>> policyFeatures = [
@@ -190,7 +190,7 @@ class _HomePageState extends State<HomePage> {
             onPageChanged: (index, _) => onChange(index),
           ),
           items: images.map((path) {
-            return SvgPicture.asset(
+            return Image.asset(
               path,
               width: double.infinity,
               fit: BoxFit.cover,

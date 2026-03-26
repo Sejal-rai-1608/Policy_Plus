@@ -1,9 +1,14 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:turfnpark/widgets/primary_button.dart';
 import '../widgets/CTextfield.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:turfnpark/auth/login_page.dart';
+
+// 🔥 ADD THESE
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class Register extends StatefulWidget {
   const Register({super.key});
@@ -16,11 +21,102 @@ class _RegisterState extends State<Register> {
   final usernameController = TextEditingController();
   final emailController = TextEditingController();
   final phoneController = TextEditingController();
+  final contactController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
 
   bool hidePassword = true;
   bool hideConfirmPassword = true;
+  bool isLoading = false;
+
+  @override
+  void dispose() {
+    usernameController.dispose();
+    emailController.dispose();
+    phoneController.dispose();
+    contactController.dispose();
+    passwordController.dispose();
+    confirmPasswordController.dispose();
+    super.dispose();
+  }
+
+  // 🔥 FINAL REGISTER FUNCTION
+  Future<void> registerUser() async {
+    if (usernameController.text.isEmpty ||
+        emailController.text.isEmpty ||
+        phoneController.text.isEmpty ||
+        passwordController.text.isEmpty ||
+        confirmPasswordController.text.isEmpty) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Please fill all fields")));
+      return;
+    }
+
+    if (passwordController.text != confirmPasswordController.text) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Passwords do not match")));
+      return;
+    }
+
+    setState(() => isLoading = true);
+
+    try {
+      print("STEP 1: Firebase start");
+
+      // 🔥 STEP 1: Firebase Register
+      UserCredential userCred = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+            email: emailController.text.trim(),
+            password: passwordController.text.trim(),
+          );
+
+      print("STEP 2: Firebase success");
+
+      String uid = userCred.user!.uid;
+      print("UID: $uid");
+
+      // 🔥 STEP 2: BACKEND CALL
+      print("STEP 3: Sending to backend");
+
+      var response = await http.post(
+        Uri.parse(
+          "https://policyplus-backend.onrender.com/api/users/saveUser",
+        ), // ⚠️ IP check
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode({
+          "uid": uid,
+          "username": usernameController.text,
+          "email": emailController.text,
+          "phone": phoneController.text,
+        }),
+      );
+
+      // 🔥 DEBUG OUTPUT
+      print("STATUS: ${response.statusCode}");
+      print("BODY: ${response.body}");
+
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Registration Successful")));
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const LoginPage()),
+      );
+    } on FirebaseAuthException catch (e) {
+      print("FIREBASE ERROR: ${e.message}");
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.message ?? "Registration failed")),
+      );
+    } catch (e) {
+      print("GENERAL ERROR: $e");
+    } finally {
+      setState(() => isLoading = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,10 +132,8 @@ class _RegisterState extends State<Register> {
                 const SizedBox(height: 40),
                 SvgPicture.asset("assets/logo/Logo.svg", height: 70),
 
-                /// TITLE
                 const SizedBox(height: 40),
 
-                /// USERNAME
                 CTextfield(
                   hintText: "Username",
                   prefix: SvgPicture.asset(
@@ -49,7 +143,6 @@ class _RegisterState extends State<Register> {
                   controller: usernameController,
                 ),
 
-                /// EMAIL
                 CTextfield(
                   hintText: "Email Id",
                   prefix: SvgPicture.asset(
@@ -60,7 +153,6 @@ class _RegisterState extends State<Register> {
                   controller: emailController,
                 ),
 
-                /// CONTACT
                 CTextfield(
                   hintText: "Contact Number",
                   prefix: SvgPicture.asset(
@@ -71,7 +163,6 @@ class _RegisterState extends State<Register> {
                   controller: phoneController,
                 ),
 
-                /// PASSWORD
                 CTextfield(
                   hintText: "New Password",
                   prefix: SvgPicture.asset(
@@ -83,7 +174,7 @@ class _RegisterState extends State<Register> {
                   suffixIcon: IconButton(
                     icon: Icon(
                       hidePassword ? Icons.visibility_off : Icons.visibility,
-                      color: Color.fromARGB(255, 0, 0, 0),
+                      color: Colors.black,
                     ),
                     onPressed: () {
                       setState(() {
@@ -93,7 +184,6 @@ class _RegisterState extends State<Register> {
                   ),
                 ),
 
-                /// CONFIRM PASSWORD
                 CTextfield(
                   hintText: "Confirm Password",
                   prefix: SvgPicture.asset(
@@ -107,7 +197,7 @@ class _RegisterState extends State<Register> {
                       hideConfirmPassword
                           ? Icons.visibility_off
                           : Icons.visibility,
-                      color: Color.fromARGB(255, 0, 0, 0),
+                      color: Colors.black,
                     ),
                     onPressed: () {
                       setState(() {
@@ -119,20 +209,13 @@ class _RegisterState extends State<Register> {
 
                 const SizedBox(height: 30),
 
-                /// SIGN UP BUTTON
                 PrimaryButton(
-                  text: "Register",
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => LoginPage()),
-                    );
-                  },
+                  text: isLoading ? "Please wait..." : "Register",
+                  onPressed: isLoading ? () {} : () async => registerUser(),
                 ),
 
                 const SizedBox(height: 20),
 
-                /// FOOTER TEXT
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -140,7 +223,7 @@ class _RegisterState extends State<Register> {
                     Text.rich(
                       TextSpan(
                         text: "Login Now",
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Color(0xffF58220),
                           fontWeight: FontWeight.bold,
                         ),
@@ -149,7 +232,7 @@ class _RegisterState extends State<Register> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => LoginPage(),
+                                builder: (context) => const LoginPage(),
                               ),
                             );
                           },
@@ -167,7 +250,6 @@ class _RegisterState extends State<Register> {
 
                 const SizedBox(height: 15),
 
-                /// SOCIAL ICONS
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -187,12 +269,4 @@ class _RegisterState extends State<Register> {
       ),
     );
   }
-
-  // Widget _socialIcon(IconData icon, Color color) {
-  //   return CircleAvatar(
-  //     radius: 22,
-  //     backgroundColor: color.withOpacity(0.1),
-  //     child: Icon(icon, color: color, size: 28),
-  //   );
-  // }
 }

@@ -7,6 +7,7 @@ import 'package:turfnpark/AccountSub_pages/bank_detail_page.dart';
 import 'package:turfnpark/AccountSub_pages/change_password.dart';
 import 'package:turfnpark/AccountSub_pages/my_policies_page.dart';
 import 'package:turfnpark/AccountSub_pages/payment_history_page.dart';
+import 'package:turfnpark/auth/Login_page.dart';
 import 'package:turfnpark/utils/app_text_styles.dart';
 import 'package:turfnpark/utils/spacing.dart';
 import 'package:turfnpark/widgets/app_card.dart';
@@ -191,7 +192,17 @@ class _AccountPageState extends State<AccountPage> {
                         AppSpace.h24,
 
                         //  Logout Button
-                        PrimaryButton(text: "Logout", onPressed: () {}),
+                        PrimaryButton(
+                          text: "Logout",
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const LoginPage(),
+                              ),
+                            );
+                          },
+                        ),
                       ],
                     ),
                   ),

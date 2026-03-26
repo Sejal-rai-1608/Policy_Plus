@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-//import 'package:flutter_svg/flutter_svg.dart';
 import 'package:turfnpark/utils/app_text_styles.dart';
 import 'package:turfnpark/utils/spacing.dart';
 import 'package:turfnpark/widgets/appbar.dart';
 import 'package:turfnpark/widgets/outlined_button.dart';
 import 'package:turfnpark/widgets/planlist_cards.dart';
 import 'package:turfnpark/Pages/plandetail.dart';
+import '../services/api_service.dart';
 
 class Plans extends StatelessWidget {
   const Plans({super.key});
@@ -14,20 +14,21 @@ class Plans extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+      backgroundColor: Colors.white,
       appBar: const CustomAppbar(
         showBackButton: false,
         leftImage: "assets/logo/Logo.svg",
       ),
       body: Column(
         children: [
+          /// 🔹 Top Header
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 12.w),
             child: Row(
               children: [
                 Expanded(
                   child: Text(
-                    "73 Plans for self",
+                    "Plans for self",
                     style: AppTextStyles.mainTitle,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -36,94 +37,71 @@ class Plans extends StatelessWidget {
               ],
             ),
           ),
+
           AppSpace.h10,
 
+          /// 🔹 Plans List from API
           Expanded(
-            child: ListView(
-              children: [
-                PlanListCard(
-                  imagePath: "assets/insurance/care.png",
-                  planName: "Care Supreme",
-                  coverAmount: "₹5 Lakhs",
-                  price: "₹893/months",
-                  title: 'View 12 more plans \n view features',
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => PlanDetail(
-                          // planName: "Care Supreme",
-                          // coverAmount: "₹5 Lakhs",
-                          // price: "₹593/months",
+            child: FutureBuilder(
+              future: ApiService.getPlans(),
+              builder: (context, snapshot) {
+                /// Loading
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+
+                /// No Data
+                if (!snapshot.hasData || (snapshot.data as List).isEmpty) {
+                  return const Center(child: Text("No Plans Available"));
+                }
+
+                var plans = snapshot.data as List;
+
+                return ListView.builder(
+                  itemCount: plans.length + 1,
+                  itemBuilder: (context, index) {
+                    /// Last button
+                    if (index == plans.length) {
+                      return Column(
+                        children: [
+                          AppSpace.h14,
+                          Center(
+                            child: OutlinedButtonWidget(
+                              text: "View All Plans",
+                              onPressed: () {},
+                            ),
+                          ),
+                          AppSpace.h14,
+                        ],
+                      );
+                    }
+
+                    var plan = plans[index];
+
+                    return Column(
+                      children: [
+                        PlanListCard(
+                          imagePath: "assets/insurance/${plan["image"]}",
+                          planName: plan["planName"],
+                          coverAmount: plan["coverAmount"],
+                          price: "₹${plan["price"]}/month",
+                          title: "View features",
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => PlanDetail(),
+                              ),
+                            );
+                          },
                         ),
-                      ),
+
+                        AppSpace.h14,
+                      ],
                     );
                   },
-                ),
-                AppSpace.h14,
-                PlanListCard(
-                  imagePath: "assets/insurance/maxlife.png",
-                  planName: "Max Life",
-                  coverAmount: "₹5 Lakhs",
-                  price: "₹593/months",
-                  title: 'View 12 more plans \n view features',
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => PlanDetail(
-                          // planName: "Max Life",
-                          // coverAmount: "₹5 Lakhs",
-                          // price: "₹593/months",
-                        ),
-                      ),
-                    );
-                  },
-                ),
-                AppSpace.h14,
-                PlanListCard(
-                  imagePath: "assets/insurance/activefp.png",
-                  planName: "Active Fit Plus",
-                  coverAmount: "₹5 Lakhs",
-                  price: "₹503/months",
-                  title: 'View 8 more plans \n view features',
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => PlanDetail(
-                          // planName: "Max Life",
-                          // coverAmount: "₹5 Lakhs",
-                          // price: "₹593/months",
-                        ),
-                      ),
-                    );
-                  },
-                ),
-                // const SizedBox(height: 16),
-                // PlanListCard(
-                //   imagePath: "assets/insurance/star.png",
-                //   planName: "Young Star Gold",
-                //   coverAmount: "₹5 Lakhs",
-                //   price: "₹593/months",
-                //   title: 'View  6 more plans \n view features',
-                // ),
-                // const SizedBox(height: 16),
-                // PlanCard(
-                //   imagePath: "assets/insurance/care.png",
-                //   planName: "Care Supreme",
-                //   coverAmount: "₹5 Lakhs",
-                //   price: "₹593/months",
-                //   title: 'View 12 more plans \n view features',
-                // ),
-                AppSpace.h14,
-                Center(
-                  child: OutlinedButtonWidget(
-                    text: "View All Plans",
-                    onPressed: () {},
-                  ),
-                ),
-              ],
+                );
+              },
             ),
           ),
         ],
