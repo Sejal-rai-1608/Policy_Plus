@@ -11,7 +11,7 @@ class GetStartedPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+      backgroundColor: Color(0xFFF58220),
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 24.w),
@@ -20,13 +20,15 @@ class GetStartedPage extends StatelessWidget {
               /// 🔥 Push content to center
               const Spacer(),
 
-              SvgPicture.asset("assets/logo/Logo.svg", height: 160.h),
+              SvgPicture.asset("assets/logo/Logo .svg", height: 160.h),
 
               const Spacer(),
 
               /// 🔥 Button at bottom
               PrimaryButton(
                 text: "Get Started",
+                textColor: Color(0xFFF58220),
+                backgroundColor: Colors.white,
                 onPressed: () {
                   Navigator.push(
                     context,

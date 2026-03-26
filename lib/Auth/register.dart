@@ -130,7 +130,7 @@ class _RegisterState extends State<Register> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const SizedBox(height: 40),
-                SvgPicture.asset("assets/logo/Logo.svg", height: 70),
+                SvgPicture.asset("assets/logo/Logo.svg", height: 80),
 
                 const SizedBox(height: 40),
 

@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class PrimaryButton extends StatelessWidget {
   final String text;
+  final Color textColor; // ✅ text color control
   final VoidCallback onPressed;
   final Color backgroundColor;
   final double borderRadius;
@@ -14,6 +15,7 @@ class PrimaryButton extends StatelessWidget {
     super.key,
     required this.text,
     required this.onPressed,
+    this.textColor = Colors.white, // ✅ default text color
     this.backgroundColor = const Color(0xffF58220),
     this.borderRadius = 14,
     this.height = 50,
@@ -41,7 +43,7 @@ class PrimaryButton extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 16.sp,
                   fontWeight: FontWeight.bold,
-                  color: Colors.white,
+                  color: textColor, // ✅ apply color
                 ),
               )
             : Row(
@@ -54,7 +56,7 @@ class PrimaryButton extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 16.sp,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                      color: textColor, // ✅ apply here also
                     ),
                   ),
                 ],

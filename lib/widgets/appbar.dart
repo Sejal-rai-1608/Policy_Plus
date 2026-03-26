@@ -31,7 +31,7 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
       scrolledUnderElevation: 0,
       backgroundColor: Colors.white,
       centerTitle: false,
-      titleSpacing: 8,
+      titleSpacing: 18,
       automaticallyImplyLeading: false,
       leading: showBackButton
           ? IconButton(
@@ -40,7 +40,7 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
             )
           : null,
       title: leftImage != null
-          ? SvgPicture.asset(leftImage!, height: 34, fit: BoxFit.contain)
+          ? SvgPicture.asset(leftImage!, height: 44, fit: BoxFit.contain)
           : Text(
               title,
               style: const TextStyle(color: Colors.black, fontSize: 18),
