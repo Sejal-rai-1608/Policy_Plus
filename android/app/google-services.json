@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "35319749462",
+    "project_id": "digipolicy-5fc2e",
+    "storage_bucket": "digipolicy-5fc2e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:35319749462:android:59088e246887abadd8d4f7",
+        "android_client_info": {
+          "package_name": "com.example.turfnpark"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "35319749462-uic94q2hfb6g1slv42jnivqaphigvu9t.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.turfnpark",
+            "certificate_hash": "fa9136e84e24c04a39f733ace52e7ef2b11f3f21"
+          }
+        },
+        {
+          "client_id": "35319749462-ng025lnllasng22e2af3j2rfft4mmgs8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCa6RnbcocE7UBBULSXr9BBt8oJ74-ZhLg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "35319749462-ng025lnllasng22e2af3j2rfft4mmgs8.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "35319749462-7ojcveinihod3tba0ip8jfao7rfsivhh.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.turfnpark"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
